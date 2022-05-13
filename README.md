@@ -22,3 +22,5 @@ The Github was created to mimic professional behavior.
 Jouan continued working. Valid move sensor was implemented (It's more complicated that one thinks).
 
 05/13/2022
+
+Playtested the game. Determined winning condition, 
