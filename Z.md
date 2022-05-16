@@ -24,3 +24,7 @@ Jouan continued working. Valid move sensor was implemented (It's more complicate
 05/13/2022
 
 Playtested the game. Determined winning condition, multi-capture
+
+05/16/2022
+
+Move method revising finished. AI methods discuss
