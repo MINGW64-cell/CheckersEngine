@@ -28,3 +28,7 @@ Playtested the game. Determined winning condition, multi-capture
 05/16/2022
 
 Move method revising finished. AI methods discuss
+
+05/17/2022
+
+Jouan absent. Task is to improve evaluate method. Successive moves still not implemented
