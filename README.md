@@ -32,3 +32,7 @@ Move method revising finished. AI methods discuss
 05/17/2022
 
 Jouan absent. Task is to improve evaluate method. Successive moves still not implemented
+
+05/18/2022
+
+Superclass Piece had reverseAB() and respective variables added. RedPiece and Redking subclasses updated to Pawn and King to for DRY reasons while BlackKing, BlackPiece are cut off.
