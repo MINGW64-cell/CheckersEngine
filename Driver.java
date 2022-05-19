@@ -26,7 +26,8 @@ public class Driver {
 	public static int redKingValue = K;
 	public static int blackKingValue = k;
 	
-    public static boolean lastMoveRed = true; //Red is true, Black is false
+	public static int turnCounter = 0;
+	
 	
 	public static int[][] board = new int[][]{
 		{0, p, 0, 0, 0, P, 0, P},
@@ -91,6 +92,10 @@ public class Driver {
 	    
 	}
 	
+	public static boolean isBlackTurn() {
+		return turnCounter%2 == 0;
+	}
+	
 	public void mouseClicked(MouseEvent e) {
         System.out.println("mouseClicked");  
         }
@@ -99,5 +104,3 @@ public class Driver {
     	
     }
 }
-
-
