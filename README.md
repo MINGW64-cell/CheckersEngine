@@ -36,3 +36,7 @@ Jouan absent. Task is to improve evaluate method. Successive moves still not imp
 05/18/2022
 
 Superclass Piece had reverseAB() and respective variables added. RedPiece and Redking subclasses updated to Pawn and King to for DRY reasons while BlackKing, BlackPiece are cut off. heatmap() was created to facilitate the determining of moves.
+
+05/19/2022
+
+Mass code updating complete. Franz debugged. John got his first day off (yay). Jouan continued on AI code. Steven worked to continue contracting the Piece -> Pawn and King Hierarchy.
