@@ -3,11 +3,23 @@ package checkers_engine;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.JOptionPane;
 
 public class CheckersEngine extends JPanel implements MouseListener, MouseMotionListener{
 	
-	public static int x1, y1, x2, y2;
+	public static int mouseX1, mouseY1, mouseX2, mouseY2;
     public static int squareSize = 80;
+    public static Color lightSquareColor = new Color(230, 230, 230);
+    public static Color darkSquareColor = new Color(150, 150, 150);
+    
+    public static Color redPieceColor = Color.RED;
+    public static Color blackPieceColor = Color.BLACK;
+    public static Color redKingColor = Color.WHITE;
+    public static Color blackKingColor = Color.WHITE;
+
+    public static boolean lastMoveRed = true; //Red is true, Black is false
+    public static boolean gameOver = false;
+    
     @Override
     public void paintComponent(Graphics g) {
     	
@@ -17,9 +29,9 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
         this.addMouseMotionListener(this);
         
         for (int i = 0; i < 64; i += 2) {
-            g.setColor(new Color(230, 230, 230));
+            g.setColor(lightSquareColor);
             g.fillRect((i % 8 + (i / 8) % 2) * squareSize, (i / 8) * squareSize, squareSize, squareSize);
-            g.setColor(new Color(150, 150, 150));
+            g.setColor(darkSquareColor);
             g.fillRect(((i + 1) % 8 - ((i + 1) / 8) % 2) * squareSize, ((i + 1) / 8) * squareSize, squareSize, squareSize);
         }
     	        
@@ -68,11 +80,11 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
         	for(int y = 0; y < 8; y++) {
         	
 	        	if(Driver.board[x][y] > 0) {
-	        		g.setColor(Color.RED);
+	        		g.setColor(redPieceColor);
 	        		g.fillOval(x * squareSize, y * squareSize, squareSize, squareSize);
 	        		
 	        		if(Driver.board[x][y] == Driver.redKingValue) {
-	        			g.setColor(Color.ORANGE);
+	        			g.setColor(redKingColor);
     	        		
     	        		int offSetX = squareSize * x;
     	        		int offSetY = squareSize * y;   	        
@@ -85,11 +97,11 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
 	        		}
         	
 	        	if(Driver.board[x][y] < 0) {
-	        		g.setColor(Color.BLACK);
+	        		g.setColor(blackPieceColor);
 	        		g.fillOval(x * squareSize, y * squareSize, squareSize, squareSize);
 	        		
 	        		if(Driver.board[x][y] == Driver.blackKingValue) {
-	        			g.setColor(Color.WHITE);
+	        			g.setColor(blackKingColor);
     	        		
     	        		int offSetX = squareSize * x;
     	        		int offSetY = squareSize * y;   	        
@@ -150,8 +162,10 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
     
     }
     
-    public static void move(int xx1, int yy1, int xx2, int yy2) {
+    public static void move(int x1, int y1, int x2, int y2) {
     	
+    	int deleteX = 0;
+    	int deleteY = 0;
     	
     	boolean isLegalMove = false;
     	
@@ -164,239 +178,292 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
     	 */
     	
 	    //preconditions met?
-    	if(!Driver.lastMoveRed) {
+    
 	    	//Red Piece
-	    	if(Driver.board[xx1][yy1] == Driver.P) {
+	    	if(Driver.board[x1][y1] == Driver.P) {
 	    	
 	    		//move forward left
-	    		if(xx2 == xx1 - 1 && yy2 == yy1 - 1) {
-	    	    	if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 - 1 && y2 == y1 - 1) {
+	    	    	if(Driver.board[x2][y2] == 0) {
 	    	    		isLegalMove = true;
 	    	    	}
 	    	    }
 	    		
 	    		//move forward right
-	    		if(xx2 == xx1 + 1 && yy2 == yy1 - 1) {
-	    			if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 + 1 && y2 == y1 - 1) {
+	    			if(Driver.board[x2][y2] == 0) {
 	    	    		isLegalMove = true;
 	    	    	}
 	    	    }
 	    		
 	    		//capture forward left
-	    		if(xx2 == xx1 - 2 && yy2 == yy1 - 2) {
-		    		if(Driver.board[xx1 - 1][yy1 - 1] < 0) {
+	    		if(x2 == x1 - 2 && y2 == y1 - 2) {
+		    		if(Driver.board[x1 - 1][y1 - 1] < 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 - 1][yy1 - 1] = 0;
+		    			deleteX = x1 - 1;
+		    			deleteY = y1 - 1;
 		    		}
 	    	    }
 	    		
 	    		//capture forward right
-	    		if(xx2 == xx1 + 2 && yy2 == yy1 - 2) {
-	    			if(Driver.board[xx1 + 1][yy1 - 1] < 0) {
+	    		if(x2 == x1 + 2 && y2 == y1 - 2) {
+	    			if(Driver.board[x1 + 1][y1 - 1] < 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 + 1][yy1 - 1] = 0;
+		    			deleteX = x1 + 1;
+		    			deleteY = y1 - 1;
 		    		}
 	    	    }
 	    	}
 	    	
 	    	//Red King
-	    	if(Driver.board[xx1][yy1] == Driver.K) {
+	    	if(Driver.board[x1][y1] == Driver.K) {
 	    		
 	    		//move forward left
-	    		if(xx2 == xx1 - 1 && yy2 == yy1 - 1) {
-	    	    	if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 - 1 && y2 == y1 - 1) {
+	    	    	if(Driver.board[x2][y2] == 0) {
 	    	    		isLegalMove = true;
 	    	    	}
 	    	    }
 	    		
 	    		//move forward right
-	    		if(xx2 == xx1 + 1 && yy2 == yy1 - 1) {
-	    			if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 + 1 && y2 == y1 - 1) {
+	    			if(Driver.board[x2][y2] == 0) {
 	    	    		isLegalMove = true;
 	    	    	}
 	    	    }
 	    		
 	    		//capture forward left
-	    		if(xx2 == xx1 - 2 && yy2 == yy1 - 2) {
-		    		if(Driver.board[xx1 - 1][yy1 - 1] < 0) {
+	    		if(x2 == x1 - 2 && y2 == y1 - 2) {
+		    		if(Driver.board[x1 - 1][y1 - 1] < 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 - 1][yy1 - 1] = 0;
+		    			deleteX = x1 - 1;
+		    			deleteY = y1 - 1;
 		    		}
 	    	    }
 	    		
 	    		//capture forward right
-	    		if(xx2 == xx1 + 2 && yy2 == yy1 - 2) {
-	    			if(Driver.board[xx1 + 1][yy1 - 1] < 0) {
+	    		if(x2 == x1 + 2 && y2 == y1 - 2) {
+	    			if(Driver.board[x1 + 1][y1 - 1] < 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 + 1][yy1 - 1] = 0;
+		    			deleteX = x1 + 1;
+		    			deleteY = y1 - 1;
 		    		}
 	    	    }
 	    		
 	    		//move backwards left
-	    		if(xx2 == xx1 - 1 && yy2 == yy1 + 1) {
-		    		if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 - 1 && y2 == y1 + 1) {
+		    		if(Driver.board[x2][y2] == 0) {
 		    			isLegalMove = true;
 		    		}
 	    	    }
 	    		
 	    		//move backwards right
-	    		if(xx2 == xx1 + 1 && yy2 == yy1 + 1) {
-	    			if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 + 1 && y2 == y1 + 1) {
+	    			if(Driver.board[x2][y2] == 0) {
 		    			isLegalMove = true;
 		    		}	
 	    	    }
 	    		
 	    		//capture backwards left
-	    		if(xx2 == xx1 - 2 && yy2 == yy1 + 2) {
-	    			if(Driver.board[xx1 - 1][yy1 + 1] < 0) {
+	    		if(x2 == x1 - 2 && y2 == y1 + 2) {
+	    			if(Driver.board[x1 - 1][y1 + 1] < 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 - 1][yy1 + 1] = 0;
+		    			deleteX = x1 - 1;
+		    			deleteY = y1 + 1;
 		    		}
 	    	    }
 	    		
 	    		//capture backwards right
-	    		if(xx2 == xx1 + 2 && yy2 == yy1 + 2) {
-	    			if(Driver.board[xx1 + 1][yy1 + 1] < 0) {
+	    		if(x2 == x1 + 2 && y2 == y1 + 2) {
+	    			if(Driver.board[x1 + 1][y1 + 1] < 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 + 1][yy1 + 1] = 0;
+		    			deleteX = x1 + 1;
+		    			deleteY = y1 + 1;
 		    		}
 	    	    }
 	    		
 	    	}
     	
-    	Driver.lastMoveRed = true;
-    	
-    	}
     	
     	
-    	if(Driver.lastMoveRed) {
+    	
+    
     		
 	    	//Black Piece
-	    	if(Driver.board[xx1][yy1] == Driver.p) {
+	    	if(Driver.board[x1][y1] == Driver.p) {
 	        	
 	    		//move backwards left
-	    		if(xx2 == xx1 - 1 && yy2 == yy1 + 1) {
-		    		if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 - 1 && y2 == y1 + 1) {
+		    		if(Driver.board[x2][y2] == 0) {
 		    			isLegalMove = true;
 		    		}
 	    	    }
 	    		
 	    		//move backwards right
-	    		if(xx2 == xx1 + 1 && yy2 == yy1 + 1) {
-	    			if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 + 1 && y2 == y1 + 1) {
+	    			if(Driver.board[x2][y2] == 0) {
 		    			isLegalMove = true;
 		    		}	
 	    	    }
 	    		
 	    		//capture backwards left
-	    		if(xx2 == xx1 - 2 && yy2 == yy1 + 2) {
-	    			if(Driver.board[xx1 - 1][yy1 + 1] > 0) {
+	    		if(x2 == x1 - 2 && y2 == y1 + 2) {
+	    			if(Driver.board[x1 - 1][y1 + 1] > 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 - 1][yy1 + 1] = 0;
+		    			deleteX = x1 - 1;
+		    			deleteY = y1 + 1;
 		    		}
 	    	    }
 	    		
 	    		//capture backwards right
-	    		if(xx2 == xx1 + 2 && yy2 == yy1 + 2) {
-	    			if(Driver.board[xx1 + 1][yy1 + 1] > 0) {
+	    		if(x2 == x1 + 2 && y2 == y1 + 2) {
+	    			if(Driver.board[x1 + 1][y1 + 1] > 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 + 1][yy1 + 1] = 0;
+		    			deleteX = x1 + 1;
+		    			deleteY = y1 + 1;
 		    		}
 	    	    }	
 	    	}
 	    	
 	    	//Black King
-	    	if(Driver.board[xx1][yy1] == Driver.k) {
+	    	if(Driver.board[x1][y1] == Driver.k) {
 	        	
 	    		//move forward left
-	    		if(xx2 == xx1 - 1 && yy2 == yy1 - 1) {
-	    	    	if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 - 1 && y2 == y1 - 1) {
+	    	    	if(Driver.board[x2][y2] == 0) {
 	    	    		isLegalMove = true;
 	    	    	}
 	    	    }
 	    		
 	    		//move forward right
-	    		if(xx2 == xx1 + 1 && yy2 == yy1 - 1) {
-	    			if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 + 1 && y2 == y1 - 1) {
+	    			if(Driver.board[x2][y2] == 0) {
 	    	    		isLegalMove = true;
 	    	    	}
 	    	    }
 	    		
 	    		//capture forward left
-	    		if(xx2 == xx1 - 2 && yy2 == yy1 - 2) {
-		    		if(Driver.board[xx1 - 1][yy1 - 1] > 0) {
+	    		if(x2 == x1 - 2 && y2 == y1 - 2) {
+		    		if(Driver.board[x1 - 1][y1 - 1] > 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 - 1][yy1 - 1] = 0;
+		    			deleteX = x1 - 1;
+		    			deleteY = y1 - 1;
 		    		}
 	    	    }
 	    		
 	    		//capture forward right
-	    		if(xx2 == xx1 + 2 && yy2 == yy1 - 2) {
-	    			if(Driver.board[xx1 + 1][yy1 - 1] > 0) {
+	    		if(x2 == x1 + 2 && y2 == y1 - 2) {
+	    			if(Driver.board[x1 + 1][y1 - 1] > 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 + 1][yy1 - 1] = 0;
+		    			deleteX = x1 + 1;
+		    			deleteY = y1 - 1;
 		    		}
 	    	    }
 	    		
 	    		//move backwards left
-	    		if(xx2 == xx1 - 1 && yy2 == yy1 + 1) {
-		    		if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 - 1 && y2 == y1 + 1) {
+		    		if(Driver.board[x2][y2] == 0) {
 		    			isLegalMove = true;
 		    		}
 	    	    }
 	    		
 	    		//move backwards right
-	    		if(xx2 == xx1 + 1 && yy2 == yy1 + 1) {
-	    			if(Driver.board[xx2][yy2] == 0) {
+	    		if(x2 == x1 + 1 && y2 == y1 + 1) {
+	    			if(Driver.board[x2][y2] == 0) {
 		    			isLegalMove = true;
 		    		}	
 	    	    }
 	    		
 	    		//capture backwards left
-	    		if(xx2 == xx1 - 2 && yy2 == yy1 + 2) {
-	    			if(Driver.board[xx1 - 1][yy1 + 1] > 0) {
+	    		if(x2 == x1 - 2 && y2 == y1 + 2) {
+	    			if(Driver.board[x1 - 1][y1 + 1] > 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 - 1][yy1 + 1] = 0;
+		    			deleteX = x1 - 1;
+		    			deleteY = y1 + 1;
 		    		}
 	    	    }
 	    		
 	    		//capture backwards right
-	    		if(xx2 == xx1 + 2 && yy2 == yy1 + 2) {
-	    			if(Driver.board[xx1 + 1][yy1 + 1] > 0) {
+	    		if(x2 == x1 + 2 && y2 == y1 + 2) {
+	    			if(Driver.board[x1 + 1][y1 + 1] > 0) {
 		    			isLegalMove = true;
-		    			Driver.board[xx1 + 1][yy1 + 1] = 0;
+		    			deleteX = x1 + 1;
+		    			deleteY = y1 + 1;
 		    		}
 	    	    }	
 	    	}
     	
-	    Driver.lastMoveRed = false;
 	    	
-    	}
     	
-	    if(isLegalMove) {	
+    	
+    	
+    	
+	    if(isLegalMove) {
+	    	
+	    	/* 
+	    	 * if (isRedMove && the piece that's moving is red
+	    	 * or if isBlackMove && the piece that's moving is black)
+	    	 */
+	    	
 	    	//moving
-	    	if(Driver.board[xx1][yy1] != 0) {
-	    		Driver.board[xx2][yy2] = Driver.board[xx1][yy1];
-	    		Driver.board[xx1][yy1] = 0;
+	    	if(lastMoveRed == (Driver.board[x1][y1] > 0)) {
+		    	if(Driver.board[x1][y1] != 0) {
+		    		Driver.board[x2][y2] = Driver.board[x1][y1]; //swap
+		    		Driver.board[x1][y1] = 0;
+		    		
+		    		Driver.board[deleteX][deleteY] = 0;
+		    		
+		    		lastMoveRed = !lastMoveRed;
+		    	}
 	    	}
 	    }
 	    	
-	    	//promotion
-	    	for(int i = 0; i < 8; i++) {
-	    		if(Driver.board[i][0] == 1) {
-	    			Driver.board[i][0] = 3;
-	    		}
-	    		if(Driver.board[i][7] == -1) {
-	    			Driver.board[i][7] = -3;
-	    		}
-	    	}
-    }
-/*    
-    public static void move(int xx1, int yy1, int xx2, int yy2) {
+    	//promotion
+    	for(int i = 0; i < 8; i++) {
+    		if(Driver.board[i][0] == Driver.P) {
+    			Driver.board[i][0] = Driver.K;
+    		}
+    		if(Driver.board[i][7] == Driver.p) {
+    			Driver.board[i][7] = Driver.k;
+    		}
+    	}
     	
-    	if(Driver.board[yy1][xx1] != 0) {
-    		Driver.board[yy2][xx2] = Driver.board[yy1][xx1];
-    		Driver.board[yy1][xx1] = 0;
+    	
+    	
+    	//do this if no more of the color left
+    	String winner;
+    	boolean noRed = true;
+    	boolean noBlack = true;
+    	for(int i = 0; i < Driver.board.length; i++) {
+    		for(int j = 0; j < Driver.board[0].length; j++) {
+    			if(Driver.board[i][j] > 0) {
+    				noRed = false;
+    			}
+    			if(Driver.board[i][j] < 0) {
+    				noBlack = false;
+    			}
+    		}
+    	}
+    	if(noRed && !gameOver) {
+    		JOptionPane.showMessageDialog(null, "The Winner Is: BLACK");
+    		gameOver = true;
+    	}
+    	else if(noBlack && !gameOver) {
+    		JOptionPane.showMessageDialog(null, "The Winner Is: RED");
+    		gameOver = true;
+    	}
+    	
+    	
+    	
+    }
+    
+    
+/*    
+    public static void move(int x1, int y1, int x2, int y2) {
+    	
+    	if(Driver.board[y1][x1] != 0) {
+    		Driver.board[y2][x2] = Driver.board[y1][x1];
+    		Driver.board[y1][x1] = 0;
     	}
     }
 */
@@ -413,6 +480,8 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
 			}
 			System.out.println();
 		}
+		System.out.println("POSSIBLE MOVES: " + AI.possibleMoves(board));
+		System.out.println("EVALUATION: " + AI.evaluate());
 		System.out.println();
 	}
     
@@ -441,10 +510,10 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
 	public void mousePressed(MouseEvent e) {
 		if (e.getX() < 8 * squareSize && e.getY() < 8 * squareSize) {
          
-            x1 = e.getX();
-            y1 = e.getY();
+            mouseX1 = e.getX();
+            mouseY1 = e.getY();
             repaint();
-            System.out.println("(x1, y1): (" + x1 + ", " + y1 + ")");
+            System.out.println("(mouseX1, mouseY1): (" + mouseX1 + ", " + mouseY1 + ")");
             
         }
 		
@@ -453,13 +522,13 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
 	public void mouseReleased(MouseEvent e) {
 		if (e.getX() < 8 * squareSize && e.getY() < 8 * squareSize) { 
            
-            x2 = e.getX();
-            y2 = e.getY();
-            System.out.println("(x2, y2): (" + x2 + ", " + y2 + ")");
+            mouseX2 = e.getX();
+            mouseY2 = e.getY();
+            System.out.println("(mouseX2, mouseY2): (" + mouseX2 + ", " + mouseY2 + ")");
             
-            move(x1/squareSize, y1/squareSize, x2/squareSize, y2/squareSize);
+            move(mouseX1/squareSize, mouseY1/squareSize, mouseX2/squareSize, mouseY2/squareSize);
             
-            System.out.println(Driver.lastMoveRed);
+            System.out.println(lastMoveRed);
             printBoard(Driver.flipXY(Driver.board));
             
             repaint();
