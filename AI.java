@@ -2,33 +2,51 @@ package checkers_engine;
 
 public class AI {
 	
-	public static int evaluate() {
+	public static int evaluate(int board[][]) {	//Task for 5/17/2022
 		
 		int sum = 0;
+		int[] rowSum = new int[board.length]; 
 		
 		for(int i = 0; i < 8; i++) {
-			for(int j = 0; j < 8; j++) {
-				sum += Driver.board[i][j];
-			}
-		}
 		
+			sum += rowSum(board[i]);
+			
+		}
+			
 		return sum;
 		
-	}
+	}	//end of evaluate()
 	
+//calculates the sum of a row.
+
+    public static int rowSum(int[] row){
+    	int rowSum = 0;
+          	for(int col = 0; col<row.length; col++){
+              rowSum += row[col];
+          	}
+        return rowSum;
+    }
+
 	public static void makeBestMove(String moveList) {
 	
-		int X1 = 0;
-		int Y1 = 0;
-		int X2 = 0;
-		int Y2 = 0;
-		
-		int[][] tempBoard = Driver.board;
+		int X1 = 0, Y1 = 0, X2 = 0, Y2 = 0;
+		int bestX1 = 0, bestY1 = 0, bestX2 = 0, bestY2 = 0;
 		
 		/*
 		 * A bunch of code to determine the best X1, Y1, X2, Y2 using Driver.board
 		 * At the end, call this method in CheckersEngine.move to implement the AI
 		 */
+		
+		for(int i = 0; i < moveList.length(); i += 4) {
+			int testBoard[][] = Driver.board;
+			
+			X1 = get(moveList, i);
+			Y1 = get(moveList, i + 1);
+			X2 = get(moveList, i + 2);
+			Y2 = get(moveList, i + 3);
+			
+		}
+		
 		
 		CheckersEngine.move(X1, Y1, X2, Y2);
 		
@@ -112,15 +130,15 @@ public class AI {
 		 */
 		
 		
-		for(int i = 0; i < moveList.length(); i += 4) {
-			if(moveList.substring(i, i + 4).contains("8")) {
-				moveList = moveList.substring(0, i) + moveList.substring(i + 4);
-				i -= 4;
-			}
-		}
+//		for(int i = 0; i < moveList.length(); i += 4) {
+//			if(moveList.substring(i, i + 4).contains("8")) {
+//				moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+//				i -= 4;
+//			}
+//		}
 		
+		return removeOutOfBounds(moveList);
 		
-		return moveList;
 	}
 	
 	/** Lmao it's like Python */
@@ -130,22 +148,34 @@ public class AI {
 		}
 		return Integer.toString(x);
 	}
-
-}
+	
+	public static int get(String testString, int index) {
+		return Integer.parseInt(testString.substring(index, index + 1));
+	}
 
 
 
 // Checks for moves that are out of bounds and removes them from the ‘moveList’ String
 // I tested the method but further testing might be needed
-String checkSubString = "";
-    for(int i = 0; i < moveList.length(); i+=4){
-       checkSubString = moveList.substring(i,i+4);
-       for(int j = 0; j < checkSubString.length(); j++){
-           if(checkSubString.substring(j,j+1).indexOf("8")>-1){
-               moveList = moveList.substring(0,i) + moveList.substring(i+4, moveList.length());
-               i-=4;
-           }
-       }
-    }
 
+	public static String removeOutOfBounds(String moveList	/*Error suppresser*/)	{
+		String checkSubString = "";
+	    
+		for(int i = 0; i < moveList.length(); i+=4){
 
+			checkSubString = moveList.substring(i,i+4);
+	       
+			for(int j = 0; j < checkSubString.length(); j++){
+	        
+				if(checkSubString.substring(j,j+1).indexOf("8")>-1){
+	               moveList = moveList.substring(0,i) + moveList.substring(i+4, moveList.length());
+	               i-=4;
+	           }
+	       }
+	    }
+		
+		return moveList;
+
+	}
+
+}
