@@ -1,3 +1,5 @@
+//This is the inheritance version of the OG CheckersEngine by Jouan
+
 package checkers_engine;
 
 import java.awt.*;
@@ -13,7 +15,7 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
     public static Color blackPieceColor = Color.BLACK;
     public static Color redKingColor = Color.WHITE;
     public static Color blackKingColor = Color.WHITE;
-    private Piece p;
+    private static Piece p;
 
     public static boolean lastMoveRed = true; //Red is true, Black is false
     public static boolean gameOver = false;
@@ -117,7 +119,7 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
     
     }
     
-    public void move(int x1, int y1, int x2, int y2)	{
+    public static void move(int x1, int y1, int x2, int y2)	{
     	
     	if(Driver.isBlackTurn())	{
     		
@@ -127,14 +129,10 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
     			p = new BlackPiece();
     		
     	}	else	{
-    		
-    		if(Driver.board[x1][x2] == Driver.redKingValue)
-    			p = new RedKing();
-    		else
-    			p = new RedPiece();
-    	}
     	
     	p.move(x1, y1, x2, y2);
+    	
+    	Piece.reverseAB();
 
 //Review Code below
     	
