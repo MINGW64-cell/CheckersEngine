@@ -40,3 +40,11 @@ Superclass Piece had reverseAB() and respective variables added. RedPiece and Re
 05/19/2022
 
 Mass code updating complete. Franz and John debugged. Jouan continued on AI code. Steven worked to continue contracting the Piece -> Pawn and King Hierarchy.
+
+05/24/2022
+
+Working continued, Jouan debugged the code. Piece superclass and respective subclasses are still a work in progress.
+
+05/25/2022
+
+
