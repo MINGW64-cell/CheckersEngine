@@ -1,53 +1,51 @@
 package checkers_engine;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Scanner;
+import javax.swing.*;
 
-public class Piece {
+@SuppressWarnings("serial")
+public class Piece extends Frame	{
 
 	protected JFrame f;
-	protected boolean isLegalMove = false;
-	protected static int a = 1, b = 1;
-	Scanner s = new Scanner(System.in);
+	
+	protected boolean isLegalMove = false, again;
+	
+	protected int a = 1, 
+			b = 1, 
+			x, 
+			y, 
+			opp, 
+			oppK;
 	
 	/*
 	 * Use polymorphism so that certain pieces have exclusive movements
 	 */
 	
-	protected void OtherPrompt()	{
-		
-		System.out.println("Move Again?");
-		
-		boolean b = s.nextBoolean();
-		
-		if(b)	{
-			
-		}
-		
-	}
+	/**
+	 * Creates an option pane that asks the user if they want to make a second move
+	 * 
+	 * @return
+	 */
 	
-	protected void prompt()	{
+	protected boolean prompt()	{
+		
+		boolean b = false;
+		
 		f = new JFrame();
 		
 		f.setVisible(true);
+		
+		int a = JOptionPane.OK_OPTION;
+
+		if(JOptionPane.OK_OPTION == a)	{
+			b = true;
+		}
+		
+		return b;
 	}
 	
     public void move(int x1, int y1, int x2, int y2) {	//Will never be used due to always being overridden
-    	
-    	if(Driver.board[x2+a][y2-a] > 0 || Driver.board[x2-a][y2-a] > 0)	{
-    		prompt();
-    	}
-    		
-    	
-    }
-    
-    protected static void reverseAB()	{
-    	if(Driver.isBlackTurn())	{
-    		a = -a;
-	    	b = -b;
-    	}
+    	//nothing lol
     }
 
 	
