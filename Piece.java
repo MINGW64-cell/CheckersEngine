@@ -4,11 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
-public class Piece extends Frame	{
+public class Piece extends JFrame	{
 
 	protected JFrame f;
 	
-	protected boolean isLegalMove = false, again;
+	protected boolean isLegalMove = false, again = true;
 	
 	protected int a = 1, 
 			b = 1, 
@@ -16,6 +16,7 @@ public class Piece extends Frame	{
 			y, 
 			opp, 
 			oppK;
+
 	
 	/*
 	 * Use polymorphism so that certain pieces have exclusive movements
@@ -27,7 +28,7 @@ public class Piece extends Frame	{
 	 * @return
 	 */
 	
-	protected boolean prompt()	{
+	protected boolean prompt()	{	//Work on this
 		
 		boolean b = false;
 		
