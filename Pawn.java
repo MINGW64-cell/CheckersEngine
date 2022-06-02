@@ -9,12 +9,12 @@ public class Pawn extends Piece	{	//Original Name Red Piece
 		
 		if(Driver.isBlackTurn())	{
 			b = -1;
-			opp = Driver.P;		//Figure out logical implications of opp
-			oppK = Driver.K;
+//			opp = Driver.P;		//Figure out logical implications of opp
+//			oppK = Driver.K;
 		}	else	{
-			b = Math.abs(b);
-			opp = Driver.p;
-			oppK = Driver.k;
+			b = 1;
+//			opp = Driver.p;
+//			oppK = Driver.k;
 		}	
 	}	//end of Pawn() constructor	
 	
@@ -54,27 +54,33 @@ public class Pawn extends Piece	{	//Original Name Red Piece
     		//capture forward left
     		if(x2 == x1 - 2*a && y2 == y1 - 2*b && (Driver.board[x1 - a][y1 - b] == opp || Driver.board[x1 - a][y1 - b] == oppK)) {
 	    			isLegalMove = true;
-	    			Driver.board[x1 - a][y1 - b] = 0;	//Piece is killed
+	    			Driver.board[x][y] = 0;	//Piece is killed		OG: Driver.board[x1 - a][y1 - b] = 0;
     	    }
     		
     		//capture forward right
     		if(x2 == x1 + 2*a && y2 == y1 - 2*b && (Driver.board[x1 + a][y1 - b] == opp || Driver.board[x1 - a][y1 - b] == opp)) {
 	    			isLegalMove = true;
-	    			Driver.board[x1 + a][y1 - b] = 0;
+	    			Driver.board[x][y] = 0;		//OG: Driver.board[x1 + a][y1 - b] = 0;
     	    }
 //    	}
 		
 		if(isLegalMove)	{
 			Driver.board[x2][y2] = c;
 			Driver.board[x1][y1] = 0;
-//			d = Driver.board[x2][y2];		Forgot the point of this thing? (probably obselete now)
+//			d = Driver.board[x2][y2];		Forgot the point of this thing? (probably obsolete now)
 		}
 			
-		multiCapture();
+		
+		
+		if(prompt())
+			multiCapture();
 		
 		
 		isLegalMove = false;
-		Driver.turn++;	
+		if(again)
+			Driver.turn++;	
+		else
+			again = true;
 		
 	}	//end of move() override
 
@@ -87,13 +93,12 @@ public class Pawn extends Piece	{	//Original Name Red Piece
 	 */
 	public void multiCapture()	{
 		
-			if(super.prompt())	{
-				
-				
-				
-			}
+		again = false;
 		
-	}	//end of multiCapture
+		this.move(x2, y2, 1, 2);		//I probably assigned the values wrong
+		
+	}	
+	//end of multiCapture
 	
 }
 
