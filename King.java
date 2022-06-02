@@ -7,12 +7,12 @@ public class King extends Pawn	{
 		
 		if(Driver.isBlackTurn())	{
 			b = -1;
-			opp = Driver.P;		//Figure out logical implications of opp
-			oppK = Driver.K;
+//			opp = Driver.P;		//Figure out logical implications of opp
+//			oppK = Driver.K;
 		}	else	{
 			b = Math.abs(b);
-			opp = Driver.p;
-			oppK = Driver.k;
+//			opp = Driver.p;
+//			oppK = Driver.k;
 		}	
 	}	//end of King() constructor
 	
@@ -57,18 +57,8 @@ public class King extends Pawn	{
 
 	@Override
 	public void multiCapture() {
+		
 		super.multiCapture();
-		
-		if(Driver.board[x+1][y+b] == opp)	{	
-			if(prompt())	{
-				
-			}
-		}
-		
-		if(Driver.board[x-1][y+b] == opp)	{
-			if(prompt())	{
-				
-			}
-		}
+
 	}
 }
