@@ -7,14 +7,14 @@ public class Pawn extends Piece	{	//Original Name Red Piece
 	
 	public Pawn()	{
 		
-		if(Driver.isBlackTurn())	{
+		if(!Driver.isBlackTurn())	{
 			b = -1;
-//			opp = Driver.P;		//Figure out logical implications of opp
-//			oppK = Driver.K;
+			opp = Driver.P;		//Figure out logical implications of opp
+			oppK = Driver.K;
 		}	else	{
 			b = 1;
-//			opp = Driver.p;
-//			oppK = Driver.k;
+			opp = Driver.p;
+			oppK = Driver.k;
 		}	
 	}	//end of Pawn() constructor	
 	
@@ -39,44 +39,42 @@ public class Pawn extends Piece	{	//Original Name Red Piece
 		//a = 1 b = 1, x pairs with a and y pairs with b
 		
 //		if(c == Driver.P || c == Driver.p) {	//P and positives are red, p and negatives are black
-	    	
+
+	if(again)	{
+		
     		//move forward left
-    		if(x2 == x1 - a && y2 == y1 - b && Driver.board[x2][y2] == 0)
+    		if(x2 == x1 - a && y2 == y1 - b && Driver.board[x2][y2] == 0 && (c != opp || c != oppK))
     	    		isLegalMove = true;
     		
     		//move forward right
-    		if(x2 == x1 + a && y2 == y1 - b && Driver.board[x2][y2] == 0)
+    		if(x2 == x1 + a && y2 == y1 - b && Driver.board[x2][y2] == 0 && (c != opp || c != oppK))
     	    		isLegalMove = true;
+	}
     		
-    		
-    	//Capture methods should work properly, so there shouldn't be a need to check it. -Steven
+    	//Capture methods should work properly, so there shouldn't be a need to check it. -Steven (I CHECKED IT DW!!)
     		
     		//capture forward left
-    		if(x2 == x1 - 2*a && y2 == y1 - 2*b && (Driver.board[x1 - a][y1 - b] == opp || Driver.board[x1 - a][y1 - b] == oppK)) {
+    		if(x2 == x1 - 2*a && y2 == y1 - 2*b && (Driver.board[x1 - a][y1 - b] == opp || Driver.board[x1 - a][y1 - b] == oppK) && (c != opp || c != oppK)) {
 	    			isLegalMove = true;
 	    			Driver.board[x][y] = 0;	//Piece is killed		OG: Driver.board[x1 - a][y1 - b] = 0;
     	    }
     		
     		//capture forward right
-    		if(x2 == x1 + 2*a && y2 == y1 - 2*b && (Driver.board[x1 + a][y1 - b] == opp || Driver.board[x1 - a][y1 - b] == opp)) {
+    		if(x2 == x1 + 2*a && y2 == y1 - 2*b && (Driver.board[x1 + a][y1 - b] == opp || Driver.board[x1 - a][y1 - b] == opp) && (c != opp || c != oppK)) {
 	    			isLegalMove = true;
 	    			Driver.board[x][y] = 0;		//OG: Driver.board[x1 + a][y1 - b] = 0;
     	    }
-//    	}
 		
 		if(isLegalMove)	{
 			Driver.board[x2][y2] = c;
 			Driver.board[x1][y1] = 0;
 //			d = Driver.board[x2][y2];		Forgot the point of this thing? (probably obsolete now)
-		}
-			
-		
-		
-		if(prompt())
-			multiCapture();
-		
-		
+		}		
+
 		isLegalMove = false;
+		if(prompt())
+			this.multiCapture();
+		
 		if(again)
 			Driver.turn++;	
 		else
@@ -95,10 +93,8 @@ public class Pawn extends Piece	{	//Original Name Red Piece
 		
 		again = false;
 		
-		this.move(x2, y2, 1, 2);		//I probably assigned the values wrong
+		move(CheckersEngine.mouseX1, CheckersEngine.mouseY1, CheckersEngine.mouseX2, CheckersEngine.mouseY2);		//I probably assigned the values wrong
 		
-	}	
-	//end of multiCapture
-	
-}
+	}		//end of multiCapture
 
+}	
