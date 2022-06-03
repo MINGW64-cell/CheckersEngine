@@ -45,6 +45,10 @@ Mass code updating complete. Franz and John debugged. Jouan continued on AI code
 
 Working continued, Jouan debugged the code. Piece superclass and respective subclasses are still a work in progress.
 
-05/25/2022
+05/26/2022
 
+Presentation
 
+06/3/2022
+
+Inheritance Version of the capture is 95% complete.
