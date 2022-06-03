@@ -5,14 +5,14 @@ public class King extends Pawn	{
 
 	public King()	{
 		
-		if(Driver.isBlackTurn())	{
+		if(!Driver.isBlackTurn())	{
 			b = -1;
-//			opp = Driver.P;		//Figure out logical implications of opp
-//			oppK = Driver.K;
+			opp = Driver.P;		//Figure out logical implications of opp
+			oppK = Driver.K;
 		}	else	{
 			b = Math.abs(b);
-//			opp = Driver.p;
-//			oppK = Driver.k;
+			opp = Driver.p;
+			oppK = Driver.k;
 		}	
 	}	//end of King() constructor
 	
@@ -22,23 +22,26 @@ public class King extends Pawn	{
 			
 		//move up right
 			
+		if(again)	{
+		
 			//move backwards left
     		if(x2 == x1 - a && y2 == y1 + b) {
-	    		if(Driver.board[x2][y2] == 0) {
+	    		if(Driver.board[x2][y2] == 0  && c != oppK) {
 	    			isLegalMove = true;
 	    		}
     	    }
     		
     		//move backwards right
     		if(x2 == x1 + a && y2 == y1 + b) {
-    			if(Driver.board[x2][y2] == 0) {
+    			if(Driver.board[x2][y2] == 0 && c != oppK) {
 	    			isLegalMove = true;
 	    		}	
     	    }
+		}
     		
     		//capture backwards left
     		if(x2 == x1 - 2*a && y2 == y1 + 2*b && (Driver.board[x1 - a][y1 + b] == opp || Driver.board[x1 - a][y1 + b] == oppK)) {
-    			if(Driver.board[x1 - a][y1 + b] == opp || Driver.board[x1 - a][y1 + b] == oppK) {
+    			if((Driver.board[x1 - a][y1 + b] == opp || Driver.board[x1 - a][y1 + b] == oppK) && c != oppK) {
 	    			isLegalMove = true;
 	    			Driver.board[x1 - 2*a][y1 + 2*b] = 0;
 	    		}
@@ -46,7 +49,7 @@ public class King extends Pawn	{
     		
     		//capture backwards right
     		if(x2 == x1 + 2*a && y2 == y1 + 2*b && (Driver.board[x1 + a][y1 + b] == opp || Driver.board[x1 + a][y1 + b] == oppK)) {
-    			if((Driver.board[x1 + a][y1 + b] == opp || Driver.board[x1 + a][y1 + b] == oppK)) {
+    			if((Driver.board[x1 + a][y1 + b] == opp || Driver.board[x1 + a][y1 + b] == oppK) && c != oppK) {
 	    			isLegalMove = true;
 	    			Driver.board[x1 + 2*a][y1 + 2*b] = 0;
 	    		}
