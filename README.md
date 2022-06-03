@@ -47,8 +47,12 @@ Working continued, Jouan debugged the code. Piece superclass and respective subc
 
 05/26/2022
 
-Presentation
+Presentation started. The AI is was named tEddy
+
+05/29/2022
+
+AI named changed to LCM (L.ethality C.aitlyn M.id). (courtesy of Franz)
 
 06/3/2022
 
-Inheritance Version of the capture is 95% complete.
+Inheritance Version of the capture method is complete. AI was renamed to TUC
