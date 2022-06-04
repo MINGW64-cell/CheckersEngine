@@ -55,4 +55,10 @@ AI named changed to LCM (L.ethality C.aitlyn M.id). (courtesy of Franz)
 
 06/3/2022
 
-Inheritance Version of the capture method is complete. AI was renamed to TUC
+Inheritance Version of the capture method is complete. AI was renamed to TUCE (T.he U.timate C.heckers Engine). (Courtesy of Franz)
+
+06/4/2022 
+
+Work on the presentation continued. Videos showing progress added.
+
+06/05/2022
