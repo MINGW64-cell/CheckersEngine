@@ -5,6 +5,7 @@ Team: Franz M., John K., Jouan Y., Steven C. (MINGW64-cell)
 Protocols:
 - If you edit the code please make sure make your own "tweak" file and paste it there. Then tell the other group members of your changes through the GC or in person. (If you're Jouan just tell Steven to copy & paste new code)
 - Any new code edits must be uploaded BEFORE 11:59 OF THAT DAY so that everyone can see your most recent code.
+- If there are any timeskips, that's because we did nothing.
 
 Summary:
 This our final Comp Sci Project. Whoever wound up stumbling upon this because I'm stupid and didn't make this private, enjoy the checkers engine code.
@@ -57,8 +58,10 @@ AI named changed to LCM (L.ethality C.aitlyn M.id). (courtesy of Franz)
 
 Inheritance Version of the capture method is complete. AI was renamed to TUCE (T.he U.timate C.heckers Engine). (Courtesy of Franz)
 
-06/4/2022 
+06/04/2022 
 
 Work on the presentation continued. Videos showing progress added.
 
-06/05/2022
+06/06/2022
+
+Jouan, Franz, John debugged the code. Steven finished the prompt() method and inheritance version of the move();
