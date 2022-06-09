@@ -20,6 +20,8 @@ public class Piece extends JFrame	{
 			y, 
 			opp, 
 			oppK;
+	
+	private boolean pressed;
 
 	
 	/*
@@ -32,45 +34,50 @@ public class Piece extends JFrame	{
 	 * @return
 	 */
 	
-	protected boolean prompt()	{	//Work on this (Done on 6/6/2022)
+	protected boolean prompt() {
 		
-		f = new JFrame("Capture Again?");
-		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		f.setLocationRelativeTo(null);
-		f.setSize(500,500);
+		JFrame a = new JFrame("Hiii");
+		a.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		a.setLocationRelativeTo(null);
+		a.setVisible(true);
+		a.setSize(300,300);
 		
-		JPanel p = new JPanel();		//Button work started
+		JPanel b = new JPanel();
+		b.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 110));
+		b.setBackground(Color.darkGray);
 		
-		JButton y = new JButton("Yes"), n = new JButton("No");	
-		f.add(y);
-		f.add(n);
+		a.add(b);
 		
-		p.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		JButton y = new JButton("Yes");
+		b.add(y);
+		JButton n = new JButton("No");
+		b.add(n);
 		
-		f.add(p, BorderLayout.SOUTH);
-			
-		f.setVisible(true);
-		
-		y.addActionListener(new ActionListener()	{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				bool = true;
-			}	
-		});	
-		
-		n.addActionListener(new ActionListener()	{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				bool = false;
-			}	
-		});	//End of addActionListener for button y
-		
-		return bool;
-	}	//End of prompt()
+		//The buttons below don't seem to block
+		while(!pressed)	{
+			y.addActionListener(new ActionListener()	{
+	
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					bool = true;
+					pressed = true;
+				}
+			});
+	
+			n.addActionListener(new ActionListener()	{
+	
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					bool = false;
+					pressed = true;
+				}
+			});
+		}
+	
+		return bool;	
+	}	//end of prompt()
 	
 	
 	
@@ -80,3 +87,4 @@ public class Piece extends JFrame	{
 
 	
 }
+
