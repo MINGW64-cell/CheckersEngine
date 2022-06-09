@@ -1,4 +1,4 @@
-//This is the inheritance version of the OG CheckersEngine by Jouan
+//This is the inheritance version of the OG CheckersEngine by Steven (OG Version made by Jouan)
 
 package checkers_engine;
 
@@ -16,6 +16,7 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
     public static Color redKingColor = Color.WHITE;
     public static Color blackKingColor = Color.WHITE;
     private static Piece p;
+    public static boolean isKing;
 
     public static boolean lastMoveRed = true; //Red is true, Black is false
     public static boolean gameOver = false;
@@ -34,46 +35,6 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
             g.setColor(new Color(150, 150, 150));
             g.fillRect(((i + 1) % 8 - ((i + 1) / 8) % 2) * squareSize, ((i + 1) / 8) * squareSize, squareSize, squareSize);
         }
-    	        
-/*    	        
-        for(int i = 0; i < 64; i++) {
-        	
-        	if(Driver.board[i / 8][i % 8] > 0) {
-        		g.setColor(Color.RED);
-        		g.fillOval((i % 8) * squareSize, (i / 8) * squareSize, squareSize, squareSize);
-        		
-        		if(Driver.board[i / 8][i % 8] == Driver.redKingValue) {
-        			g.setColor(Color.BLACK);
-	        		
-	        		int offSetX = squareSize * (i % 8);
-	        		int offSetY = squareSize * (i / 8);   	        
-	        
-	        		g.fillPolygon(new int[] {offSetX + squareSize / 5, offSetX + squareSize / 5, offSetX + squareSize * 4 / 5, offSetX + squareSize * 4 / 5, offSetX + squareSize * 13 / 20, offSetX + squareSize / 2, offSetX + squareSize * 7 / 20}, 
-	        		new int[] {offSetY + squareSize / 5, offSetY + squareSize * 4 / 5, offSetY + squareSize * 4 / 5, offSetY + squareSize / 5, offSetY + squareSize / 2, offSetY + squareSize / 5, offSetY + squareSize / 2}, 7);
-	        	
-        		}
-        	}
-        	
-        	if(Driver.board[i / 8][i % 8] < 0) {
-        		g.setColor(Color.BLACK);
-        		g.fillOval((i % 8) * squareSize, (i / 8) * squareSize, squareSize, squareSize);
-        		
-        		if(Driver.board[i / 8][i % 8] == Driver.blackKingValue) {
-        			g.setColor(Color.WHITE);
-	        		
-	        		int offSetX = squareSize * (i % 8);
-	        		int offSetY = squareSize * (i / 8);   	        
-	        
-	        		g.fillPolygon(new int[] {offSetX + squareSize / 5, offSetX + squareSize / 5, offSetX + squareSize * 4 / 5, offSetX + squareSize * 4 / 5, offSetX + squareSize * 13 / 20, offSetX + squareSize / 2, offSetX + squareSize * 7 / 20}, 
-	        		new int[] {offSetY + squareSize / 5, offSetY + squareSize * 4 / 5, offSetY + squareSize * 4 / 5, offSetY + squareSize / 5, offSetY + squareSize / 2, offSetY + squareSize / 5, offSetY + squareSize / 2}, 7);
-	        	
-        		}
-        		
-        		
-        	}
-        	
-        }
-*/
     	        
         for(int x = 0; x < 8; x++) {
         	
@@ -120,10 +81,15 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
     	
     	if(a == 1 || a == -1)
     		p = new Pawn();
-    	else if(a == 3 || a == -3)
+    	else if(a == 3 || a == -3)	{
+    		isKing = true;
     		p = new King();
+    	}
     	    	
-    	p.move(x1, y1, x2, y2);
+    	p.move(mouseX1/squareSize, mouseY1/squareSize, mouseX2/squareSize, mouseY2/squareSize);
+    	
+    	//set p to null to remove caches of set objects in if statement?
+    	isKing = false;
     	
     	//promotion
     	for(int i = 0; i < 8; i++) {
@@ -211,6 +177,7 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
             repaint();
             System.out.println("(mouseX1, mouseY1): (" + mouseX1 + ", " + mouseY1 + ")");
             
+            System.out.println(Driver.turn);
         }
 		
 	}
@@ -229,7 +196,7 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
             
             repaint();
             
-            return;
+//            return;
 		}
 		
 	}
@@ -245,6 +212,10 @@ public class CheckersEngine extends JPanel implements MouseListener, MouseMotion
 	}
 
 }
+
+
+
+
 
 
 
