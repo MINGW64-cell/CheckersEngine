@@ -65,3 +65,7 @@ Work on the presentation continued. Videos showing progress added.
 06/06/2022
 
 Jouan, Franz, John debugged the code. Steven finished the prompt() method and inheritance version of the move();
+
+6/09/2022
+
+prompt() method fixed. Project is due tomorrow.
