@@ -26,11 +26,31 @@ public class AI {
           	}
         return rowSum;
     }
+    
+    public static int[][] heatmap = new int[][]{
+		{0, 100, 0, 120, 0, 140, 0, 140},
+		{100, 0, 100, 0, 140, 0, 140, 0},
+		{0, 100, 0, 120, 0, 140, 0, 140},
+		{100, 0, 100, 0, 140, 0, 140, 0},
+		{0, 100, 0, 120, 0, 140, 0, 140},
+		{100, 0, 100, 0, 140, 0, 140, 0},
+		{0, 100, 0, 120, 0, 140, 0, 140},
+		{100, 0, 100, 0, 140, 0, 140, 0},		
+	};
+	
+	public static int evaluate2(int[][] board) {
+		int sum = 0;
+		for(int i = 1; i < 64; i++) {
+			sum += board[i/8][i%8] * heatmap[i/8][i%8];
+		}
+		return sum;
+	}
 
 	public static void makeBestMove(String moveList) {
 	
 		int X1 = 0, Y1 = 0, X2 = 0, Y2 = 0;
 		int bestX1 = 0, bestY1 = 0, bestX2 = 0, bestY2 = 0;
+		int bestEval = Integer.MAX_VALUE;
 		
 		/*
 		 * A bunch of code to determine the best X1, Y1, X2, Y2 using Driver.board
@@ -38,12 +58,46 @@ public class AI {
 		 */
 		
 		for(int i = 0; i < moveList.length(); i += 4) {
-			int testBoard[][] = Driver.board;
 			
-			X1 = get(moveList, i);
-			Y1 = get(moveList, i + 1);
-			X2 = get(moveList, i + 2);
-			Y2 = get(moveList, i + 3);
+			int deleteX = 0;
+			int deleteY = 0;
+			
+			int[][] testBoard = Driver.board;
+			
+			X1 = getNum(moveList, i);
+			Y1 = getNum(moveList, i + 1);
+			X2 = getNum(moveList, i + 2);
+			Y2 = getNum(moveList, i + 3);
+			
+			testBoard[X2][Y2] = testBoard[X1][Y1];
+			testBoard[X1][Y1] = 0;
+			
+			if(X2 - 2 == X1 && Y2 - 2 == Y1) {
+				deleteX = X2 - 1;
+				deleteY = Y2 - 1;
+			}
+			else if(X2 + 2 == X1 && Y2 - 2 == Y1) {
+				deleteX = X2 + 1;
+				deleteY = Y2 - 1;			
+			}
+			else if(X2 - 2 == X1 && Y2 + 2 == Y1) {
+				deleteX = X2 - 1;
+				deleteY = Y2 + 1;
+			}
+			else if(X2 + 2 == X1 && Y2 + 2 == Y1) {
+				deleteX = X2 + 1;
+				deleteY = Y2 + 1;
+			}
+			
+			testBoard[deleteX][deleteY] = 0;
+			
+			if(evaluate(testBoard) < bestEval) {
+				bestX1 = X1;
+				bestY1 = Y1;
+				bestX2 = X2;
+				bestY2 = Y2;
+			}
+
 			
 		}
 		
@@ -74,7 +128,7 @@ public class AI {
 			for(int y = 0; y < 8; y++) {
 				
 				// str(x1, y1, x2, y2)
-				if(board[y][x] == Driver.p) { 		/*  
+				if(board[x][y] == Driver.p) { 		/*  
 													* No clue why this works 
 													* But it does(?) 
 													* And that's good enough
@@ -85,7 +139,7 @@ public class AI {
 					
 					// possible move back left
 					moveList += (str(x) + str(y) + str(x - 1) + str(y + 1));
-
+					
 					// possible capture back right
 					moveList += (str(x) + str(y) + str(x + 2) + str(y + 2));
 					
@@ -128,16 +182,38 @@ public class AI {
 		/*
 		 * Delete illegal moves
 		 */
+
 		
+		for(int i = 0; i < moveList.length(); i += 4) {
+			if(moveList.substring(i, i + 4).contains("8")) {
+				moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+				i -= 4;
+			}
+		}
 		
-//		for(int i = 0; i < moveList.length(); i += 4) {
-//			if(moveList.substring(i, i + 4).contains("8")) {
-//				moveList = moveList.substring(0, i) + moveList.substring(i + 4);
-//				i -= 4;
-//			}
-//		}
+		for(int i = 0; i < moveList.length(); i += 4) {
+			if(board[getNum(moveList, i + 2)][getNum(moveList, i + 3)] != 0) {
+				moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+				i -= 4;
+			}
+		}
 		
-		return removeOutOfBounds(moveList);
+		for(int i = 0; i < moveList.length(); i += 4) {
+			if(getNum(moveList, i + 2) == getNum(moveList, i) + 2) {
+				if(board[getNum(moveList, i) + 1][getNum(moveList, i + 1) + 1] <= 0) {
+					moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+					i -= 4;
+				}
+			}
+			else if(getNum(moveList, i + 2) == getNum(moveList, i) - 2) {
+				if(board[getNum(moveList, i) - 1][getNum(moveList, i + 1) + 1] <= 0) {
+					moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+					i -= 4;
+				}
+			}
+		}
+		
+		return moveList;
 		
 	}
 	
@@ -149,7 +225,7 @@ public class AI {
 		return Integer.toString(x);
 	}
 	
-	public static int get(String testString, int index) {
+	public static int getNum(String testString, int index) {
 		return Integer.parseInt(testString.substring(index, index + 1));
 	}
 
@@ -176,6 +252,10 @@ public class AI {
 		
 		return moveList;
 
+	}
+	
+	public int[][] makeMove(int[][] board, int x1, int y1, int x2, int y2){
+		return board;
 	}
 
 }
