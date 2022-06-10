@@ -1,4 +1,4 @@
-package checkers_engine;
+package checkers_engine2;
 
 public class AI {
 	
@@ -28,14 +28,14 @@ public class AI {
     }
     
     public static int[][] heatmap = new int[][]{
-		{0, 100, 0, 120, 0, 140, 0, 140},
-		{100, 0, 100, 0, 140, 0, 140, 0},
-		{0, 100, 0, 120, 0, 140, 0, 140},
-		{100, 0, 100, 0, 140, 0, 140, 0},
-		{0, 100, 0, 120, 0, 140, 0, 140},
-		{100, 0, 100, 0, 140, 0, 140, 0},
-		{0, 100, 0, 120, 0, 140, 0, 140},
-		{100, 0, 100, 0, 140, 0, 140, 0},		
+		{0, 100, 0, 110, 0, 125, 0, 120},
+		{100, 0, 100, 0, 120, 0, 120, 0},
+		{0, 100, 0, 110, 0, 120, 0, 120},
+		{100, 0, 100, 0, 120, 0, 120, 0},
+		{0, 100, 0, 110, 0, 120, 0, 120},
+		{100, 0, 100, 0, 120, 0, 120, 0},
+		{0, 100, 0, 110, 0, 120, 0, 120},
+		{100, 0, 100, 0, 125, 0, 125, 0},		
 	};
 	
 	public static int evaluate2(int[][] board) {
@@ -62,47 +62,66 @@ public class AI {
 			int deleteX = 0;
 			int deleteY = 0;
 			
-			int[][] testBoard = Driver.board;
+			int[][] testBoard = new int[8][8];
+			for(int x = 0; x < 8; x++) {
+				for(int y = 0; y < 8; y++) {
+					testBoard[x][y] = Driver.board[x][y];
+				}
+			}
 			
 			X1 = getNum(moveList, i);
 			Y1 = getNum(moveList, i + 1);
 			X2 = getNum(moveList, i + 2);
 			Y2 = getNum(moveList, i + 3);
 			
-			testBoard[X2][Y2] = testBoard[X1][Y1];
-			testBoard[X1][Y1] = 0;
+//			testBoard[X2][Y2] = testBoard[X1][Y1];
+//			testBoard[X1][Y1] = 0;
+			try {
+				
+				if(X2 - 2 == X1 && Y2 - 2 == Y1) {
+					deleteX = X2 - 1;
+					deleteY = Y2 - 1;
+				}
+				else if(X2 + 2 == X1 && Y2 - 2 == Y1) {
+					deleteX = X2 + 1;
+					deleteY = Y2 - 1;			
+				}
+				else if(X2 - 2 == X1 && Y2 + 2 == Y1) {
+					deleteX = X2 - 1;
+					deleteY = Y2 + 1;
+				}
+				else if(X2 + 2 == X1 && Y2 + 2 == Y1) {
+					deleteX = X2 + 1;
+					deleteY = Y2 + 1;
+				}
+				
+				testBoard[deleteX][deleteY] = 0; /*issue*/
+				
+				deleteX = 0;
+				deleteY = 0;
+				
+				if(evaluate2(testBoard) < bestEval) {
+					bestX1 = X1;
+					bestY1 = Y1;
+					bestX2 = X2;
+					bestY2 = Y2;
+				}	
 			
-			if(X2 - 2 == X1 && Y2 - 2 == Y1) {
-				deleteX = X2 - 1;
-				deleteY = Y2 - 1;
 			}
-			else if(X2 + 2 == X1 && Y2 - 2 == Y1) {
-				deleteX = X2 + 1;
-				deleteY = Y2 - 1;			
+			catch(Exception e) {
+				
 			}
-			else if(X2 - 2 == X1 && Y2 + 2 == Y1) {
-				deleteX = X2 - 1;
-				deleteY = Y2 + 1;
-			}
-			else if(X2 + 2 == X1 && Y2 + 2 == Y1) {
-				deleteX = X2 + 1;
-				deleteY = Y2 + 1;
-			}
-			
-			testBoard[deleteX][deleteY] = 0;
-			
-			if(evaluate(testBoard) < bestEval) {
-				bestX1 = X1;
-				bestY1 = Y1;
-				bestX2 = X2;
-				bestY2 = Y2;
-			}
-
-			
 		}
 		
+
+//		CheckersEngine.move(X1, Y1, X2, Y2);
 		
-		CheckersEngine.move(X1, Y1, X2, Y2);
+		
+		CheckersEngine.bestMove[0] = X1;
+		CheckersEngine.bestMove[1] = Y1;
+		CheckersEngine.bestMove[2] = X2;
+		CheckersEngine.bestMove[3] = Y2;
+		
 		
 	}
 	
@@ -185,30 +204,50 @@ public class AI {
 
 		
 		for(int i = 0; i < moveList.length(); i += 4) {
-			if(moveList.substring(i, i + 4).contains("8")) {
-				moveList = moveList.substring(0, i) + moveList.substring(i + 4);
-				i -= 4;
+			try {
+				if(moveList.substring(i, i + 4).contains("8")) {
+					moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+					i -= 4;
+				}	
+			}
+			catch(Exception e) {
+				
 			}
 		}
 		
 		for(int i = 0; i < moveList.length(); i += 4) {
-			if(board[getNum(moveList, i + 2)][getNum(moveList, i + 3)] != 0) {
-				moveList = moveList.substring(0, i) + moveList.substring(i + 4);
-				i -= 4;
+			try {
+				if(board[getNum(moveList, i + 2)][getNum(moveList, i + 3)] != 0) {
+					moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+					i -= 4;
+				}
+			}
+			catch(Exception e) {
+				
 			}
 		}
 		
 		for(int i = 0; i < moveList.length(); i += 4) {
 			if(getNum(moveList, i + 2) == getNum(moveList, i) + 2) {
-				if(board[getNum(moveList, i) + 1][getNum(moveList, i + 1) + 1] <= 0) {
-					moveList = moveList.substring(0, i) + moveList.substring(i + 4);
-					i -= 4;
+				try {
+					if(board[getNum(moveList, i) + 1][getNum(moveList, i + 1) + 1] <= 0) {
+						moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+						i -= 4;
+					}
+				}
+				catch(Exception e) {
+					
 				}
 			}
 			else if(getNum(moveList, i + 2) == getNum(moveList, i) - 2) {
-				if(board[getNum(moveList, i) - 1][getNum(moveList, i + 1) + 1] <= 0) {
-					moveList = moveList.substring(0, i) + moveList.substring(i + 4);
-					i -= 4;
+				try {
+					if(board[getNum(moveList, i) - 1][getNum(moveList, i + 1) + 1] <= 0) {
+						moveList = moveList.substring(0, i) + moveList.substring(i + 4);
+						i -= 4;
+					}
+				}
+				catch(Exception e) {
+					
 				}
 			}
 		}
@@ -259,3 +298,9 @@ public class AI {
 	}
 
 }
+
+
+
+
+
+

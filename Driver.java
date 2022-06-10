@@ -1,4 +1,4 @@
-package checkers_engine;
+package checkers_engine2;
 
 import java.util.*;
 import javax.swing.*;
@@ -62,7 +62,7 @@ public class Driver {
 		}
 		*/
 		
-		JFrame f = new JFrame("checkers_engine");
+		JFrame f = new JFrame("Checkers_AI");
 		
 		f.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e) {
@@ -73,7 +73,7 @@ public class Driver {
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    CheckersEngine ui = new CheckersEngine();
 	    f.add(ui);
-	    f.setSize(CheckersEngine.squareSize * 8, CheckersEngine.squareSize * 8 + 30);
+	    f.setSize(CheckersEngine.squareSize * 8 + 15, CheckersEngine.squareSize * 8 + 30);
 	    f.setVisible(true);
 	    
 /*	    while(true){
@@ -104,3 +104,6 @@ public class Driver {
     	
     }
 }
+
+
+
