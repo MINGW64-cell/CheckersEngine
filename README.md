@@ -1,6 +1,6 @@
 The Official Branch contains working code as of 6/10/2022.
 
-(Although multimoves are not implemented here)
+(multicapture not implemented here)
 
 If you wish to get this checkers game please copy the classes from this.
 
